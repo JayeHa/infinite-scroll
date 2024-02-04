@@ -10,9 +10,10 @@ const users = Array.from(Array(1024).keys()).map(
 );
 
 export const handlers = [
-  http.get("/users", async ({ params }) => {
-    const size = Number(params["size"]);
-    const page = Number(params["page"]);
+  http.get("/users", async ({ request }) => {
+    const url = new URL(request.url);
+    const size = Number(url.searchParams.get("size"));
+    const page = Number(url.searchParams.get("page"));
     const totalCount = users.length;
     const totalPages = Math.round(totalCount / size);
 
