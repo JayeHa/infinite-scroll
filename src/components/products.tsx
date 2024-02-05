@@ -1,14 +1,13 @@
 import { useMemo } from "react";
+import { useFetchProducts } from "../hooks/products";
 import { useIntersect } from "../hooks/useIntersect";
-import { useFetchUsers } from "../hooks/users";
 
-const PAGE_SIZE = 10;
-
-export const User = () => {
-  const { data, hasNextPage, isFetching, fetchNextPage } = useFetchUsers({
-    size: PAGE_SIZE,
+export const Products = () => {
+  const { data, hasNextPage, isFetching, fetchNextPage } = useFetchProducts({
+    size: 10,
   });
-  const users = useMemo(
+
+  const products = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.contents) : []),
     [data]
   );
@@ -22,9 +21,10 @@ export const User = () => {
 
   return (
     <div>
-      {users.map((user) => (
-        <div key={user.id} style={{ height: "10vh" }}>
-          {user.name}
+      {products.map((product) => (
+        <div key={product.id}>
+          {product.title}
+          <img src={product.image} />
         </div>
       ))}
       {isFetching && <div>loading...🕐</div>}
