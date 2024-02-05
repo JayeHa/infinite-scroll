@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { PaginationParams, PaginationResponse } from "../types/server";
-import { throttle } from "../utils/throttle";
+import { throttleByAnimationFrame } from "../utils/throttle";
 
 interface InfiniteScrollOptions {
   size: number;
@@ -37,8 +37,7 @@ export const useInfiniteScroll = <T>(
   }, [page]);
 
   useEffect(() => {
-    const handleScroll = throttle(() => {
-      console.log("scroll");
+    const handleScroll = throttleByAnimationFrame(() => {
       const { scrollTop, offsetHeight } = document.documentElement;
       if (window.innerHeight + scrollTop + offset >= offsetHeight) {
         setFetching(true);

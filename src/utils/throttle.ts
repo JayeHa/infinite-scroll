@@ -18,3 +18,11 @@ export const throttle = (handler: (...args: any[]) => void, timeout = 300) => {
     }
   };
 };
+
+export const throttleByAnimationFrame = (handler: (...args: any[]) => void) => {
+  return function (this: any, ...args: any[]) {
+    window.requestAnimationFrame(() => {
+      handler.apply(this, args);
+    });
+  };
+};
