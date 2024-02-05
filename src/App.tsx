@@ -1,21 +1,14 @@
-import { fetchUsers } from "./apis/users";
-import { useInfiniteScroll } from "./hooks/useInfiniteScroll";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { User } from "./components/user";
 
-const PAGE_SIZE = 10;
+const queryClient = new QueryClient();
 
 export function App() {
-  const { data: users, isFetching } = useInfiniteScroll(fetchUsers, {
-    size: PAGE_SIZE,
-  });
-
   return (
-    <div className="App">
-      {users.map((user) => (
-        <div key={user.id} style={{ height: "10vh" }}>
-          {user.name}
-        </div>
-      ))}
-      {isFetching && <div>loading...🕐</div>}
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <User />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
