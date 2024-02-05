@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Products } from "./components/products";
+import "./styles/global.css";
 
 const queryClient = new QueryClient();
 
