@@ -3,7 +3,7 @@ import { useFetchProducts } from "../hooks/products";
 import { useIntersect } from "../hooks/useIntersect";
 import { ProductCard } from "./ProductCard";
 
-export const Products = () => {
+export const ProductList = () => {
   const { data, hasNextPage, isFetching, fetchNextPage } = useFetchProducts({
     size: 10,
   });

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Layout } from "./components/Layout";
-import { Products } from "./components/products";
+import { ProductList } from "./components/ProductList";
 import "./styles/global.css";
 
 const queryClient = new QueryClient();
@@ -10,7 +10,7 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>
-        <Products />
+        <ProductList />
       </Layout>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
