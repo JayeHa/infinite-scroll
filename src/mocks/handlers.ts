@@ -5,11 +5,10 @@ import { PaginationResponse } from "../types/server";
 const products = Array.from(Array(1024).keys()).map(
   (id): Product => ({
     id,
-    title: `product${id + 1}`,
-    price: id * 10000 * 3 + ((id * 100) / 3) * 5,
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    image: `https://picsum.photos/id/${id % 10}/200`,
+    title: `대형 패브릭포스터 벽인테리어 ${id + 1}`,
+    price: Math.round(((id + 1) % 5) * 10000 + (id + 2 * 100)),
+    brand: `더미화실${id + 1}`,
+    image: `https://picsum.photos/id/${(id % 10) + 10}/200`,
   })
 );
 
