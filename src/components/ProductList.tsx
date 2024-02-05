@@ -5,22 +5,24 @@ import { ProductCard } from "./ProductCard";
 
 export const ProductList = () => {
   const { data, hasNextPage, isFetching, fetchNextPage } = useFetchProducts({
-    size: 10,
+    size: 10
   });
 
   const products = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.contents) : []),
-    [data],
+    [data]
   );
 
   const ref = useIntersect(
     async (entry, observer) => {
+      if (!entry.isIntersecting) return;
+
       observer.unobserve(entry.target);
       if (hasNextPage && !isFetching) {
         fetchNextPage();
       }
     },
-    { rootMargin: "120%" },
+    { rootMargin: "120%" }
   );
 
   return (
