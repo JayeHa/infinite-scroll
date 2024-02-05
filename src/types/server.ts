@@ -1,3 +1,8 @@
+export type PaginationParams = {
+  size: number;
+  page: number;
+};
+
 export interface PaginationResponse<T> {
   contents: T[];
   pageNumber: number;
