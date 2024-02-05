@@ -1,4 +1,4 @@
-import { HttpResponse, delay, http } from "msw";
+import { HttpResponse, http } from "msw";
 import { Product } from "../model/product";
 import { PaginationResponse } from "../types/server";
 
@@ -20,8 +20,6 @@ export const handlers = [
     const page = Number(url.searchParams.get("page"));
     const totalCount = products.length;
     const totalPages = Math.round(totalCount / size);
-
-    await delay(500);
 
     return HttpResponse.json<PaginationResponse<Product>>(
       {
