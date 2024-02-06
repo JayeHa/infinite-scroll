@@ -1,7 +1,13 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeGridProps, FixedSizeGrid as Grid } from "react-window";
 import { useFetchProducts } from "../hooks/products";
-import { useIntersect } from "../hooks/useIntersect";
+import { MAX_WIDTH } from "../styles/constants";
 import { ProductCard } from "./ProductCard";
+
+const NUM_COLUMNS = 4;
+const ROW_HEIGHT = 400;
+const ROW_MARGIN = 10; // 여유 행 수
 
 export const ProductList = () => {
   const { data, hasNextPage, isFetching, fetchNextPage } = useFetchProducts({
@@ -13,25 +19,63 @@ export const ProductList = () => {
     [data]
   );
 
-  const ref = useIntersect(
-    async (entry, observer) => {
-      if (!entry.isIntersecting) return;
+  const loadMoreItems = useCallback(() => {
+    if (hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetching, fetchNextPage]);
 
-      observer.unobserve(entry.target);
-      if (hasNextPage && !isFetching) {
-        fetchNextPage();
+  const onScroll = useCallback<NonNullable<FixedSizeGridProps["onScroll"]>>(
+    ({ verticalScrollDirection, scrollTop }) => {
+      const rowLength = products.length / NUM_COLUMNS;
+      const isNearBottom = scrollTop >= (rowLength - ROW_MARGIN) * ROW_HEIGHT;
+
+      if (
+        verticalScrollDirection &&
+        !isFetching &&
+        hasNextPage &&
+        isNearBottom
+      ) {
+        loadMoreItems();
       }
     },
-    { rootMargin: "120%" }
+    [loadMoreItems, isFetching, hasNextPage, products.length]
   );
 
+  const ProductCell: FixedSizeGridProps["children"] = ({
+    columnIndex,
+    rowIndex,
+    style
+  }) => {
+    const product = products[rowIndex * NUM_COLUMNS + columnIndex];
+    return (
+      product && (
+        <div style={{ ...style, padding: "10px" }}>
+          <ProductCard key={product.id} product={product} />
+        </div>
+      )
+    );
+  };
+
   return (
-    <div className="grid grid-cols-4 gap-x-4 gap-y-16">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+    <>
+      <AutoSizer>
+        {({ height, width }: { height: number; width: number }) => (
+          <Grid
+            className="product-list"
+            onScroll={onScroll}
+            columnCount={NUM_COLUMNS}
+            rowCount={Math.ceil(products.length / NUM_COLUMNS)}
+            width={width}
+            height={height}
+            columnWidth={MAX_WIDTH / NUM_COLUMNS}
+            rowHeight={ROW_HEIGHT}
+          >
+            {ProductCell}
+          </Grid>
+        )}
+      </AutoSizer>
       {isFetching && <div>loading...🕐</div>}
-      <div ref={ref} />
-    </div>
+    </>
   );
 };

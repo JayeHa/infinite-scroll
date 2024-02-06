@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 @layer components {
-  .layout-inner {
-    @apply w-full max-w-[1200px] px-12;
+  .product-list {
+    @apply flex justify-center px-4;
+
+    > div {
+      position: relative;
+    }
   }
 }
