@@ -3,9 +3,9 @@ import { Header } from "./Header";
 
 export const Layout = ({ children }: PropsWithChildren) => {
   return (
-    <main className="flex flex-col items-center">
+    <div className="flex min-h-[100vh] flex-col items-center">
       <Header />
-      <div className="layout-inner mt-24 pt-12">{children}</div>
-    </main>
+      <main className="mt-24 h-full w-full flex-auto">{children}</main>
+    </div>
   );
 };
